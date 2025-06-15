@@ -2,13 +2,13 @@
 using namespace std;
 vector<vector<int>> dp;
 int minMultiplications(vector<int> &arr, int i, int j){
-    if(i==j||i==j-1) return 0;
-    if(dp[i][j]!=-1) return dp[i][j];
-    int minNo=INT_MAX;
-    for(int k=i+1;k<j;k++){
-        minNo=min(minNo,minMultiplications(arr,i,k)+minMultiplications(arr,k,j)+arr[i]*arr[j]*arr[k]);
+    if(i==j||i+1==j) return 0;
+    if(dp[i][j]!=-1) return dp[i][j]; 
+    int minMul=INT_MAX;
+    for(int idx=i+1;idx<j;idx++){
+        minMul=min(minMul,minMultiplications(arr,i,idx)+minMultiplications(arr,idx,j)+arr[i]*arr[idx]*arr[j]);
     }
-    return minNo;
+    return dp[i][j]=minMul;
 }
 int main(){
     vector<int> arr = {40, 20, 30, 10, 30};
