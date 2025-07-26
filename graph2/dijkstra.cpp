@@ -26,6 +26,24 @@ int dijkstra(int src,int dist){
     return dis[dist];
 }
 
+int dijkstraUsingSet(int src,int d){
+    set<pp> s;
+    vector<int> dist(graph.size()+1,1e9);
+    s.insert({0,src});
+    while(!s.empty()){
+        auto curr=*(s.begin());
+        auto [dis,node]=curr;
+        s.erase(curr);
+        for(auto [n,w]:graph[node]){
+            if(dis+w<dist[n]){
+                s.insert({dis+w,n});
+                dist[n]=dis+w;
+            }
+        }
+    }
+    return dist[d];
+}
+
 int main(){
     graph.resize(7,list<pp> ());
     add_edge(0,2,2);
@@ -36,7 +54,7 @@ int main(){
     add_edge(4,5,5);
     add_edge(4,6,3);
     add_edge(5,6,1);
-    cout<<"distance: "<<dijkstra(0,6)<<endl;
+    cout<<"distance: "<<dijkstraUsingSet(0,6)<<endl;
     cout<<endl;
     return 0;
 }
