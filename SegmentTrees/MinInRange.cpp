@@ -12,6 +12,7 @@ void buildST(vector<int>&arr,vector<int>&seg,int lo,int hi,int idx){
     buildST(arr,seg,mid+1,hi,2*idx+2);
     seg[idx]=min(seg[2*idx+1],seg[2*idx+2]);
 }
+
 int minInRange(vector<int>&arr,vector<int>&seg,int lo,int hi,int idx,int l,int r){
     // no overlap
     if(hi<l||lo>r) return INT_MAX;
@@ -23,6 +24,16 @@ int minInRange(vector<int>&arr,vector<int>&seg,int lo,int hi,int idx,int l,int r
     int rightMin=minInRange(arr,seg,mid+1,hi,2*idx+2,l,r);
     return min(leftMin,rightMin);
 }
+void updateQuery(vector<int>&seg,int lo,int hi,int idx,int val,int i){
+    if(lo==hi){
+        seg[idx]=val;
+        return;
+    }
+    int mid=(lo+hi)>>1;
+    if(i<=mid) updateQuery(seg,lo,mid,2*idx+1,val,i);
+    else updateQuery(seg,mid+1,hi,2*idx+2,val,i);
+    seg[idx]=min(seg[2*idx+1],seg[2*idx+2]);
+}
 int main(){
     vector<int> arr={29,23,49,23,45,56,24};
     vector<int> seg(4*arr.size());
@@ -31,9 +42,18 @@ int main(){
     cout<<"number of queries:";
     cin>>q;
     while(q--){
-        int l,r;
-        cin>>l>>r;
-        cout<<minInRange(arr,seg,0,arr.size()-1,0,l,r)<<endl;
+        int type;
+        cin>>type;
+        if(type==0){
+            int l,r;
+            cin>>l>>r;
+            cout<<minInRange(arr,seg,0,arr.size()-1,0,l,r)<<endl;
+        }else{
+            int val,idx;
+            cin>>idx>>val;
+            updateQuery(seg,0,arr.size()-1,0,val,idx);
+            cout<<"updated"<<endl;
+        }
     }
     return 0;
 }
